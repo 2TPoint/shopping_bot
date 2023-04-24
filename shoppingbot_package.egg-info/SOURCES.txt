@@ -1,0 +1,17 @@
+LICENSE
+README.md
+icon.png
+main.py
+setup.py
+.idea/.gitignore
+.idea/misc.xml
+.idea/modules.xml
+.idea/shopping_bot.iml
+.idea/vcs.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+shoppingbot_package.egg-info/PKG-INFO
+shoppingbot_package.egg-info/SOURCES.txt
+shoppingbot_package.egg-info/dependency_links.txt
+shoppingbot_package.egg-info/requires.txt
+shoppingbot_package.egg-info/top_level.txt

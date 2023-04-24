@@ -3,14 +3,23 @@ import telebot
 import webbrowser
 from telebot import types
 
-bot = telebot.TeleBot('6239002249:AAFzUiVsQNdwbkASuxub9Pj37vxjlB1Tr7I')
+bot = telebot.TeleBot('6239002249:AAFzUiVsQNdwbkASuxub9Pj37vxjlB1Tr7I')  # Инициализация бота
 
+# Список, содержащий ответы бота на неизвестные команды
 wrong_answers = ['Я не понял, что ты хочешь сказать', 'Извини, я тебя не понимаю', 'Я не знаю такой команды',
                  'Мой разработчик не говорил, что отвечать в такой ситуации -_-']
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    """
+    Обрабатывает команду '/start' от пользователя:
+           1. Запускает бота
+           2. Создает клавиатуру для главного меню
+           3. Выводит приветствующий текст
+    :param message: сообщение от пользователя
+    :return: ничего не вовзращает
+    """
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     products_button = types.KeyboardButton("🛍 Товары")
     about_button = types.KeyboardButton("📄 О боте")
@@ -19,7 +28,7 @@ def start(message):
     markup.row(about_button, support_button)
     if message.text == '/start':
         bot.send_message(message.chat.id,
-                         f'Привет, {message.from_user.first_name}!\nЯ телеграм-бот для покупок\nУ меня ты сможешь купить некоторые товары!\nКонтакты моих разработчиков: @skylejke, @wJexson',
+                         f'Привет, {message.from_user.first_name}!\nЯ телеграмм-бот для покупок\nC помощью меня вы сможете купить некоторые товары!\nКонтакты моих разработчиков: @skylejke, @wJexson',
                          reply_markup=markup)
     else:
         bot.send_message(message.chat.id, 'Перекинул вас в главное меню', reply_markup=markup)
@@ -27,6 +36,12 @@ def start(message):
 
 @bot.message_handler()
 def get_info(message):
+    """
+    Обрабатывает текст, присланный пользователем
+    В завимости от текста вызывает соответствующие методы
+    :param message: сообщение от пользователя
+    :return: ничего не вовзращает
+    """
     if message.text == "📄 О боте":
         aboutChapter(message)
     elif message.text == "🛍 Товары":
@@ -73,6 +88,7 @@ def get_info(message):
         bot.send_message(message.chat.id, wrong_answers[random.randint(0, 3)])
 
 
+# Раздел товаров
 def productsChapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton('🔹 Товар №1')
@@ -86,14 +102,16 @@ def productsChapter(message):
     bot.send_message(message.chat.id, 'Раздел товаров', reply_markup=markup)
 
 
+# Раздел информации о боте
 def aboutChapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton('↩ Назад в меню')
     markup.add(button1)
-    bot.send_message(message.chat.id, 'Я телеграм-бот для покупок\nУ меня ты сможешь купить некоторые товары!',
+    bot.send_message(message.chat.id, 'Я телеграмм-бот для покупок\nC помощью меня вы сможете купить некоторые товары!',
                      reply_markup=markup)
 
 
+# Раздел поддержки
 def supportChapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     button1 = types.KeyboardButton('✏ Написать разработчику')
@@ -104,7 +122,12 @@ def supportChapter(message):
 
 @bot.message_handler(content_types=['photo'])
 def get_photo(message):
+    """
+    Обрабатывает фото, присланное пользователем
+    :param message: сообщение от пользователя
+    :return: ничего не вовзращает
+    """
     bot.send_message(message.chat.id, 'У меня нет возможности просматривать фото :(')
 
 
-bot.polling(none_stop=True)
+bot.polling(none_stop=True)  # Бесконечная работа бота
