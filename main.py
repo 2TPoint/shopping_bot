@@ -28,7 +28,8 @@ def start(message):
     markup.row(about_button, support_button)
     if message.text == '/start':
         bot.send_message(message.chat.id,
-                         f'Привет, {message.from_user.first_name}!\nЯ телеграмм-бот для покупок\nC помощью меня вы сможете купить некоторые товары!\nКонтакты моих разработчиков: @skylejke, @wJexson',
+                         f'Привет, {message.from_user.first_name}!\nЯ телеграмм-бот для покупок\nC помощью меня вы '
+                         f'сможете купить некоторые товары!\nКонтакты моих разработчиков: @skylejke, @wJexson',
                          reply_markup=markup)
     else:
         bot.send_message(message.chat.id, 'Перекинул вас в главное меню', reply_markup=markup)
@@ -43,11 +44,11 @@ def get_info(message):
     :return: ничего не вовзращает
     """
     if message.text == "📄 О боте":
-        aboutChapter(message)
+        about_chapter(message)
     elif message.text == "🛍 Товары":
-        productsChapter(message)
+        products_chapter(message)
     elif message.text == "⚙ Поддержка":
-        supportChapter(message)
+        support_chapter(message)
     elif message.text == '🔹 Товар №1':
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button1 = types.KeyboardButton('💳 Купить')
@@ -81,7 +82,7 @@ def get_info(message):
         elif seller == 1:
             webbrowser.open('https://t.me/wJexson')
     elif message.text == '↩ Назад':
-        productsChapter(message)
+        products_chapter(message)
     elif message.text == '↩ Назад в меню':
         start(message)
     else:
@@ -89,7 +90,7 @@ def get_info(message):
 
 
 # Раздел товаров
-def productsChapter(message):
+def products_chapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton('🔹 Товар №1')
     button2 = types.KeyboardButton('🔹 Товар №2')
@@ -103,7 +104,7 @@ def productsChapter(message):
 
 
 # Раздел информации о боте
-def aboutChapter(message):
+def about_chapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton('↩ Назад в меню')
     markup.add(button1)
@@ -112,7 +113,7 @@ def aboutChapter(message):
 
 
 # Раздел поддержки
-def supportChapter(message):
+def support_chapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
     button1 = types.KeyboardButton('✏ Написать разработчику')
     button2 = types.KeyboardButton('↩ Назад в меню')
