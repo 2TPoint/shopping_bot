@@ -2,6 +2,7 @@ LICENSE
 README.md
 icon.png
 main.py
+products.xlsx
 requirements.txt
 setup.py
 .idea/.gitignore

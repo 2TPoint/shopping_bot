@@ -83,8 +83,6 @@ pytest-xdist
 pytest-xvfb
 python-dateutil
 pytz
-PyVirtualDisplay
-pywin32
 pyzmq
 requests
 six
