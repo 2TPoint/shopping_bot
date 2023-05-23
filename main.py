@@ -1,6 +1,5 @@
 import random
 import telebot
-import webbrowser
 import openpyxl
 from telebot import types
 
@@ -15,7 +14,7 @@ class Product:
 
 def get_products():
     # Загрузка данных из Excel-файла
-    workbook = openpyxl.load_workbook("asd.xlsx")
+    workbook = openpyxl.load_workbook("products.xlsx")
     worksheet = workbook.active
 
     # Создание списка для хранения объектов товаров
@@ -75,13 +74,17 @@ def start(message):
         bot.send_message(message.chat.id, 'Перекинул вас в главное меню', reply_markup=markup)
 
 
+# Создаем словарь для хранения выбранных товаров для каждого пользователя
+selected_products = {}
+
+
 @bot.message_handler()
 def get_info(message):
     """
     Обрабатывает текст, присланный пользователем
     В завимости от текста вызывает соответствующие методы
     :param message: сообщение от пользователя
-    :return: ничего не вовзращает
+    :return: ничего не возвращает
     """
     if message.text == "📄 О боте":
         about_chapter(message)
@@ -89,39 +92,26 @@ def get_info(message):
         products_chapter(message)
     elif message.text == "⚙ Поддержка":
         support_chapter(message)
-    elif message.text == '🔹 Товар №1':
+    elif message.text.startswith('🔹 Товар №'):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button1 = types.KeyboardButton('💳 Купить')
         button2 = types.KeyboardButton('↩ Назад')
         markup.row(button1, button2)
-        bot.send_message(message.chat.id, 'Информация о первом товаре...', reply_markup=markup)
-    elif message.text == '🔹 Товар №2':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button1 = types.KeyboardButton('💳 Купить')
-        button2 = types.KeyboardButton('↩ Назад')
-        markup.row(button1, button2)
-        bot.send_message(message.chat.id, 'Информация о втором товаре...', reply_markup=markup)
-    elif message.text == '🔹 Товар №3':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button1 = types.KeyboardButton('💳 Купить')
-        button2 = types.KeyboardButton('↩ Назад')
-        markup.row(button1, button2)
-        bot.send_message(message.chat.id, 'Информация о третьем товаре...', reply_markup=markup)
-    elif message.text == '🔹 Товар №4':
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button1 = types.KeyboardButton('💳 Купить')
-        button2 = types.KeyboardButton('↩ Назад')
-        markup.row(button1, button2)
-        bot.send_message(message.chat.id, 'Информация о четвертом товаре...', reply_markup=markup)
+        product = random.choice(products)
+        selected_products[message.chat.id] = product  # Сохраняем выбранный товар для данного пользователя
+        info = f"Название: {product.name}\nОписание: {product.description}\nЦена: {product.price} руб."
+        bot.send_message(message.chat.id, "Информация о товаре:\n" + info, reply_markup=markup)
+    elif message.text == '💳 Купить':
+        product = selected_products.get(message.chat.id)  # Получаем выбранный товар для данного пользователя
+        if product:
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            bot.send_message(message.chat.id, "Ссылка на товар:\n" + product.link, reply_markup=markup)
+        else:
+            bot.send_message(message.chat.id, "Выберите товар сначала.")
     elif message.text == '✏ Написать разработчику':
         bot.send_message(message.chat.id, '<b>Контакты моих разработчиков:</b> @skylejke, @wJexson', parse_mode='html')
-    elif message.text == '💳 Купить':
-        seller = random.randint(0, 1)
-        if seller == 0:
-            webbrowser.open('https://t.me/skylejke')
-        elif seller == 1:
-            webbrowser.open('https://t.me/wJexson')
     elif message.text == '↩ Назад':
+        del selected_products[message.chat.id]  # Удаляем выбранный товар для данного пользователя
         products_chapter(message)
     elif message.text == '↩ Назад в меню':
         start(message)
@@ -148,7 +138,8 @@ def about_chapter(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     button1 = types.KeyboardButton('↩ Назад в меню')
     markup.add(button1)
-    bot.send_message(message.chat.id, 'Я телеграмм-бот для покупок\nC помощью меня вы сможете купить некоторые товары!',
+    bot.send_message(message.chat.id,
+                     'Я телеграмм-бот для покупок\nC помощью меня вы сможете узнать информацию о выгодных товарах и приобрести их!',
                      reply_markup=markup)
 
 

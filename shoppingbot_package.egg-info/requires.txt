@@ -113,3 +113,5 @@ webencodings
 widgetsnbextension
 xarray
 zipp
+setuptools
+openpyxl
