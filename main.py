@@ -1,7 +1,47 @@
 import random
 import telebot
 import webbrowser
+import openpyxl
 from telebot import types
+
+
+class Product:
+    def __init__(self, name, description, price, link):
+        self.name = name
+        self.description = description
+        self.price = price
+        self.link = link
+
+
+def get_products():
+    # Загрузка данных из Excel-файла
+    workbook = openpyxl.load_workbook("asd.xlsx")
+    worksheet = workbook.active
+
+    # Создание списка для хранения объектов товаров
+    products = []
+
+    # Итерация по строкам таблицы и создание объектов Товар
+    for row in worksheet.iter_rows(min_row=2, values_only=True):
+        name = row[0]
+        description = row[1]
+        price = row[2]
+        link = row[3]
+
+        product = Product(name, description, price, link)
+        products.append(product)
+
+    return products
+    # # Вывод полученных данных
+    # for product in products:
+    #     print(f"Название: {product.name}")
+    #     print(f"Описание: {product.description}")
+    #     print(f"Цена: {product.price}")
+    #     print(f"Ссылка: {product.link}")
+    #     print()
+
+
+products = get_products()
 
 bot = telebot.TeleBot('6239002249:AAFzUiVsQNdwbkASuxub9Pj37vxjlB1Tr7I')  # Инициализация бота
 
