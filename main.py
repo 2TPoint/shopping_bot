@@ -111,8 +111,11 @@ def get_info(message):
     elif message.text == '✏ Написать разработчику':
         bot.send_message(message.chat.id, '<b>Контакты моих разработчиков:</b> @skylejke, @wJexson', parse_mode='html')
     elif message.text == '↩ Назад':
-        del selected_products[message.chat.id]  # Удаляем выбранный товар для данного пользователя
-        products_chapter(message)
+        if len(selected_products) == 0:
+            products_chapter(message)
+        else:
+            del selected_products[message.chat.id]  # Удаляем выбранный товар для данного пользователя
+            products_chapter(message)
     elif message.text == '↩ Назад в меню':
         start(message)
     else:
